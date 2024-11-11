@@ -17,12 +17,12 @@ export async function POST(request: Request) {
     const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, body.email));
 
     if (existingUser.length > 0) {
-      return Response.json({ message: "user already registered" }, { status: 409 });
+      return Response.json({ message: "user already exists!" }, { status: 409 });
     } else {
       await db.insert(usersTable).values(body);
-      return Response.json({ message: "success" }, { status: 200 });
+      return Response.json({ message: "user has been created!" }, { status: 200 });
     }
-  } catch {
-    return Response.json({ message: "internal server error" }, { status: 500 });
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
 }
