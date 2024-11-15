@@ -5,4 +5,5 @@ export const usersTable = mysqlTable('users_table', {
   name: varchar({ length: 255 }).notNull(),
   age: int().notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
+  password: varchar({ length: 255 }).notNull(),
 });
