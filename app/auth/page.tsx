@@ -1,3 +1,5 @@
+"use client";
+
 import Login from "@/components/login";
 import Register from "@/components/register";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";

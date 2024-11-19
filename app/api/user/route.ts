@@ -22,7 +22,9 @@ export async function POST(request: Request) {
       await db.insert(usersTable).values(body);
       return Response.json({ message: "user has been created!" }, { status: 200 });
     }
-  } catch (error: any) {
-    return Response.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return Response.json({ error: error.message }, { status: 500 });
+    }
   }
 }

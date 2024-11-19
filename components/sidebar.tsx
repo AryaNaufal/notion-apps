@@ -1,30 +1,4 @@
-// const menu = ["Search", "Notion AI", "Home", "Inbox"];
-
-// export default function SideBar() {
-//   return (
-//     <div className="h-screen bg-[#202020] w-[40%] md:w-[25%] lg:w-[15%] text-[#999]">
-//       <div className="flex flex-col h-full py-3">
-//         <div className="hover:bg-[rgba(255,255,255,0.1)] hover:text-white cursor-pointer mx-3 px-2 py-1 rounded-md hover:font-semibold">
-//           Username
-//         </div>
-//         <div>
-//           {menu.map((item) => (
-//             <div
-//               key={item}
-//               className="hover:bg-[rgba(255,255,255,0.1)] hover:text-white cursor-pointer mx-3 px-2 py-1 rounded-md hover:font-semibold"
-//             >
-//               {item}
-//             </div>
-//           ))}
-//         </div>
-//         <div className="hover:bg-[rgba(255,255,255,0.1)] hover:text-white cursor-pointer mx-3 px-2 py-1 rounded-md hover:font-semibold">
-//           Task Bar
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
+"use client";
 import { ChevronDown, Home, Inbox, Plus, Search } from "lucide-react";
 
 import {
@@ -46,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -66,7 +41,11 @@ const items = [
   },
 ];
 
-export async function AppSidebar() {
+export function AppSidebar({ isCookie }: { isCookie: string }) {
+  const handleLogout = () => {
+    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/auth";
+  };
   return (
     <Sidebar>
       <SidebarHeader>
@@ -75,17 +54,24 @@ export async function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  Username
+                  {isCookie}
                   <ChevronDown className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-                <DropdownMenuItem>
-                  <span>Acme Inc</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Acme Corp.</span>
-                </DropdownMenuItem>
+                {isCookie ? (
+                  <Link href="/auth">
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <span>Logout</span>
+                    </DropdownMenuItem>
+                  </Link>
+                ) : (
+                  <Link href="/auth">
+                    <DropdownMenuItem>
+                      <span>Login</span>
+                    </DropdownMenuItem>
+                  </Link>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

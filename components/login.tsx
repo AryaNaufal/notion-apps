@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "./ui/toaster";
+import { Toaster } from "@/components/ui/toaster";
 
 import {
   Card,
@@ -23,7 +23,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "@/components/ui/form";
+import { user } from "@/model/user.model";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -58,7 +59,7 @@ export default function Register() {
 
       const data = await response.json();
 
-      const user = data.find((item: any) => item.email === values.email);
+      const user = data.find((item: user) => item.email === values.email);
 
       if (!user) {
         toast({
@@ -73,15 +74,17 @@ export default function Register() {
           variant: "destructive",
         });
       } else {
-        localStorage.setItem("user", JSON.stringify(user));
+        document.cookie = `user=${JSON.stringify(user)}`;
         window.location.href = "/";
       }
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     }
   }
 
