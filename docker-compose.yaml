@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  # Service for Next.js application
+  nextjs:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USER=user
+      - DATABASE_PASSWORD=rootpassword
+      - DATABASE_NAME=noteApp
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+    command: npm run dev
+
+  # Service for MySQL
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: noteApp
+      MYSQL_USER: user
+      MYSQL_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+    volumes:
+      - db_data:/var/lib/mysql
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
